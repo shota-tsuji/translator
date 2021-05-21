@@ -23,13 +23,14 @@ impl StringTranslate for StringTranslator {
     }
 }
 
-struct StringValidator {
+pub struct StringValidator {
     re: regex::Regex,
 }
 
 impl StringValidator {
-    fn new() -> Box<dyn StringValidate> {
-        Box::new(StringValidator { re: Regex::new(r"[[:alpha:]]+").unwrap() })
+    pub fn new() -> Box<dyn StringValidate> {
+        let re = Regex::new(r"[[:alpha:]]+").unwrap();
+        Box::new(StringValidator { re })
     }
 }
 
