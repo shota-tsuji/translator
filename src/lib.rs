@@ -1,17 +1,13 @@
+mod domain;
+
 use regex::Regex;
+use crate::domain::validator;
 
 pub trait StringTranslate {
     /// 文字列を受け取って小文字にして返すメソッド
     /// @param word 操作対象の文字列
     /// @return 小文字化された文字列
     fn to_lower(word: &str) -> String;
-}
-
-pub trait StringValidate {
-    /// 文字列を受け取ってアルファベットのみであるかどうかを返すメソッド
-    /// @param word 確認対象の文字列
-    /// @return アルファベットのみの文字列であるかどうか
-    fn validate(&self, word: &str) -> bool;
 }
 
 struct StringTranslator {
@@ -28,13 +24,13 @@ pub struct StringValidator {
 }
 
 impl StringValidator {
-    pub fn new() -> Box<dyn StringValidate> {
+    pub fn new() -> Box<dyn validator::StringValidate> {
         let re = Regex::new(r"[[:alpha:]]+").unwrap();
         Box::new(StringValidator { re })
     }
 }
 
-impl StringValidate for StringValidator {
+impl validator::StringValidate for StringValidator {
     fn validate(&self, word: &str) -> bool {
         self.re.is_match(word)
     }
