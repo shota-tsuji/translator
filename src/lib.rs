@@ -28,10 +28,8 @@ struct StringValidator {
 }
 
 impl StringValidator {
-    fn new() -> StringValidator {
-        StringValidator {
-            re: Regex::new(r"[[:alpha:]]+").unwrap(),
-        }
+    fn new() -> Box<dyn StringValidate> {
+        Box::new(StringValidator { re: Regex::new(r"[[:alpha:]]+").unwrap() })
     }
 }
 
@@ -55,7 +53,7 @@ mod tests {
     #[test]
     fn given_alphabets_return_true() {
         let word = "validString";
-        let string_validator: StringValidator = StringValidator::new();
+        let string_validator = StringValidator::new();
         assert!(string_validator.validate(&word));
     }
 }
