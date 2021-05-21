@@ -1,13 +1,15 @@
 use crate::domain::validator;
 use regex::Regex;
 
+const EXPRESSION: &'static str = r"^[[:alpha:]]+$";
+
 pub struct StringValidator {
     re: regex::Regex,
 }
 
 impl StringValidator {
     pub fn new() -> Box<dyn validator::StringValidate> {
-        let re = Regex::new(r"[[:alpha:]]+").unwrap();
+        let re = Regex::new(EXPRESSION).unwrap();
         Box::new(StringValidator { re })
     }
 }
@@ -26,5 +28,12 @@ mod tests {
         let word = "validString";
         let string_validator = StringValidator::new();
         assert!(string_validator.validate(&word));
+    }
+
+    #[test]
+    fn given_non_alphabets_return_false() {
+        let word = "invalid-String";
+        let string_validator = StringValidator::new();
+        assert!(!string_validator.validate(&word));
     }
 }
