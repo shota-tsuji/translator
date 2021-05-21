@@ -1,7 +1,5 @@
 mod domain;
-
-use regex::Regex;
-use crate::domain::validator;
+pub mod infrastructure;
 
 pub trait StringTranslate {
     /// 文字列を受け取って小文字にして返すメソッド
@@ -19,23 +17,6 @@ impl StringTranslate for StringTranslator {
     }
 }
 
-pub struct StringValidator {
-    re: regex::Regex,
-}
-
-impl StringValidator {
-    pub fn new() -> Box<dyn validator::StringValidate> {
-        let re = Regex::new(r"[[:alpha:]]+").unwrap();
-        Box::new(StringValidator { re })
-    }
-}
-
-impl validator::StringValidate for StringValidator {
-    fn validate(&self, word: &str) -> bool {
-        self.re.is_match(word)
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -45,12 +26,5 @@ mod tests {
         assert_eq!("abc", StringTranslator::to_lower(&word));
         let word = "DEF";
         assert_eq!("def", StringTranslator::to_lower(&word));
-    }
-
-    #[test]
-    fn given_alphabets_return_true() {
-        let word = "validString";
-        let string_validator = StringValidator::new();
-        assert!(string_validator.validate(&word));
     }
 }
