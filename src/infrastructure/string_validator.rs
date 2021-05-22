@@ -3,18 +3,18 @@ use regex::Regex;
 
 const EXPRESSION: &'static str = r"^[[:alpha:]]+$";
 
-pub struct StringValidator {
+pub struct AlphabetValidator {
     re: regex::Regex,
 }
 
-impl StringValidator {
-    pub fn new() -> Box<dyn validator::StringValidate> {
+impl AlphabetValidator {
+    pub fn new() -> Box<dyn validator::StringValidator> {
         let re = Regex::new(EXPRESSION).unwrap();
-        Box::new(StringValidator { re })
+        Box::new(AlphabetValidator { re })
     }
 }
 
-impl validator::StringValidate for StringValidator {
+impl validator::StringValidator for AlphabetValidator {
     fn validate(&self, word: &str) -> bool {
         self.re.is_match(word)
     }
@@ -26,14 +26,14 @@ mod tests {
     #[test]
     fn given_alphabets_return_true() {
         let word = "validString";
-        let string_validator = StringValidator::new();
+        let string_validator = AlphabetValidator::new();
         assert!(string_validator.validate(&word));
     }
 
     #[test]
     fn given_non_alphabets_return_false() {
         let word = "invalid-String";
-        let string_validator = StringValidator::new();
+        let string_validator = AlphabetValidator::new();
         assert!(!string_validator.validate(&word));
     }
 }
