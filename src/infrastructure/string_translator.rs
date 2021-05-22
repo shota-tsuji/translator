@@ -1,10 +1,10 @@
-use crate::domain::translator::StringTranslate;
+use crate::domain::translator::StringTranslator;
 
-struct StringTranslator {
+struct LowerTranslator {
 }
 
-impl StringTranslate for StringTranslator {
-    fn to_lower(word: &str) -> String {
+impl StringTranslator for LowerTranslator {
+    fn translate(word: &str) -> String {
         word.to_lowercase()
     }
 }
@@ -15,8 +15,8 @@ mod tests {
     #[test]
     fn given_capital_return_lower_characters() {
         let word = "aBc";
-        assert_eq!("abc", StringTranslator::to_lower(&word));
+        assert_eq!("abc", LowerTranslator::translate(&word));
         let word = "DEF";
-        assert_eq!("def", StringTranslator::to_lower(&word));
+        assert_eq!("def", LowerTranslator::translate(&word));
     }
 }
