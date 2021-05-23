@@ -1,3 +1,4 @@
+#[cfg_attr(feature = "mock", mockall::automock)]
 pub trait StringValidator {
     /// 文字列を受け取って有効であるかどうかを返すメソッド
     /// @param word 確認対象の文字列
