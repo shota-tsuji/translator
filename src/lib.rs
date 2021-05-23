@@ -2,13 +2,16 @@ mod domain;
 pub mod infrastructure;
 
 pub use crate::domain::validator::StringValidator;
+pub use crate::domain::translator::StringTranslator;
 
 #[cfg(feature = "mock")]
 pub use crate::domain::validator::MockStringValidator;
+pub use crate::domain::translator::MockStringTranslator;
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use mockall::predicate::eq;
 
     // 関数が実行されると検証と変換の処理がされている
     #[test]
@@ -19,10 +22,11 @@ mod tests {
             .returning(|_| true);
         validator.validate("validWord");
 
-        //let mut translator = domain::translator::MockStringTranslator::new();
-        //translator.expect_translate()
-        //    .times(1)
-        //    .returning(|_| "abc");
-        //translator.translate("ABC");
+        let ctx_translator = MockStringTranslator::translate_context();
+        ctx_translator.expect()
+            .with(eq("ABC"))
+            .times(1)
+            .returning(|_| "abc".to_string());
+        assert_eq!("abc", MockStringTranslator::translate("ABC"));
     }
 }

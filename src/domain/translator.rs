@@ -1,3 +1,4 @@
+#[cfg_attr(feature = "mock", mockall::automock)]
 pub trait StringTranslator {
     /// 文字列を受け取って変換して返すメソッド
     /// @param word 操作対象の文字列
