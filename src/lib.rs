@@ -21,14 +21,13 @@ impl LowerProcesser {
         if (*self.validator).validate(word) {
             return LowerTranslator::translate(word);
         } else {
-            return "abc".to_string();
+            return "failed".to_string();
         }
     }
 
     pub fn new() -> Self {
-        let validator = AlphabetValidator::new();
         LowerProcesser {
-            validator: validator,
+            validator: AlphabetValidator::new(),
         }
     }
 }
@@ -51,11 +50,23 @@ mod tests {
             .times(1)
             .return_const("abc".to_string());
 
-        let word_translator = LowerProcesser {
+        let processor = LowerProcesser {
             validator: Box::new(validator),
         };
-        assert_eq!("abc", word_translator.run("ABC"));
+
+        assert_eq!("abc", processor.run("ABC"));
     }
 
-    // 異常系のテスト
+    // validationに失敗した場合失敗用のメッセージが返る
+    #[test]
+    fn given_non_alphabets_return_failed_message() {
+        let mut validator = MockStringValidator::new();
+        validator.expect_validate().return_const(false);
+
+        let processor = LowerProcesser {
+            validator: Box::new(validator),
+        };
+
+        assert_eq!("failed", processor.run("invalid-word"));
+    }
 }
