@@ -1,10 +1,9 @@
-use crate::domain::translator::StringTranslator;
-
-struct LowerTranslator {
+pub struct LowerTranslator {
 }
 
-impl StringTranslator for LowerTranslator {
-    fn translate(word: &str) -> String {
+#[cfg_attr(feature = "mock", mockall::automock)]
+impl LowerTranslator {
+    pub fn translate(word: &str) -> String {
         word.to_lowercase()
     }
 }

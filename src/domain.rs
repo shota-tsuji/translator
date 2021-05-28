@@ -1,2 +1,2 @@
-pub mod validator;
 pub mod translator;
+pub mod validator;
