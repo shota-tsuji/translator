@@ -18,6 +18,9 @@ fn main() {
     let processor = LowerProcesser::new();
 
     if let Some(word) = matches.value_of("word") {
-        println!("{}", processor.run(word).unwrap());
+        match processor.run(word) {
+            Ok(result) => println!("{}", result),
+            Err(message) => println!("{}", message),
+        }
     }
 }
