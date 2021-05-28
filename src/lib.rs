@@ -17,11 +17,11 @@ pub struct LowerProcesser {
 }
 
 impl LowerProcesser {
-    pub fn run(&self, word: &str) -> String {
+    pub fn run(&self, word: &str) -> Result<String, &'static str> {
         if (*self.validator).validate(word) {
-            return LowerTranslator::translate(word);
+            Ok(LowerTranslator::translate(word))
         } else {
-            return "failed".to_string();
+            Err("failed")
         }
     }
 
@@ -37,7 +37,7 @@ mod tests {
     use super::*;
     use mockall::predicate::eq;
 
-    // 関数が実行されると検証と変換の処理がされている
+    // 有効な文字列を渡した場合validationと変換の処理がされて変換後の値を含んだResultが返される
     #[test]
     fn when_run_then_validated_and_translated() {
         let mut validator = MockStringValidator::new();
@@ -54,7 +54,7 @@ mod tests {
             validator: Box::new(validator),
         };
 
-        assert_eq!("abc", processor.run("ABC"));
+        assert_eq!("abc", processor.run("ABC").unwrap());
     }
 
     // validationに失敗した場合失敗用のメッセージが返る
@@ -67,6 +67,6 @@ mod tests {
             validator: Box::new(validator),
         };
 
-        assert_eq!("failed", processor.run("invalid-word"));
+        assert_eq!("failed", processor.run("invalid-word").unwrap_err());
     }
 }
